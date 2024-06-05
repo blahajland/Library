@@ -1,11 +1,6 @@
 export class ColorsService {
-    colorChecker: RegExp
-    cssChecker: RegExp
-
-    constructor() {
-        this.colorChecker = new RegExp('^#(?:[0-9a-f]{6}|[0-9a-f]{8}|[0-9a-f]{3})$', 'i')
-        this.cssChecker = new RegExp('^var\\(--[a-z0-9]+\\)$', 'i')
-    }
+    colorChecker: RegExp = new RegExp('^#(?:[0-9a-f]{6}|[0-9a-f]{8}|[0-9a-f]{3})$', 'i')
+    cssChecker: RegExp = new RegExp('^var\\(--[a-z0-9]+\\)$', 'i')
 
     isValidHexColor(clr: string) {
         return this.colorChecker.test(clr)

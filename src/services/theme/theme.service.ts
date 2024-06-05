@@ -1,9 +1,5 @@
 import {cookiesService} from "../cookies/cookies.service";
 import {ThemeError} from "../../shared/errors";
-import JSDOM from 'jsdom-global'
-
-if (process.env.MochaTest === '1')
-    JSDOM()
 
 interface ThemeNames {
     light: string,
@@ -15,9 +11,10 @@ export class ThemeService {
     cookieName: string
     currentTheme: string
 
-    constructor(names: ThemeNames, cookieName = 'theme', testMode = false) {
+    constructor(names: ThemeNames, cookieName = 'theme') {
         this.names = names
         this.cookieName = cookieName
+        this.currentTheme = names.light
         this.setTheme(names.light)
     }
 
@@ -46,7 +43,9 @@ export class ThemeService {
 
     private getHead(): HTMLHtmlElement {
         const head = document.querySelector('html')
-        return !head ? null : head
+        if(!head)
+            throw new Error(`html element doesn't exist.`)
+        return head
     }
 }
 

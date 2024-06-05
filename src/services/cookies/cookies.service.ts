@@ -33,7 +33,7 @@ export class CookiesService {
         if (key === '')
             throw new CookieError(this.errorCodes.emptyKey, key)
         let returnedValue = this.cookieInterface.get(key)
-        if (returnedValue === '')
+        if (!returnedValue || returnedValue === '')
             throw new CookieError(this.errorCodes.doesntExist, key)
         return returnedValue
     }

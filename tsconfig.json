@@ -1,12 +1,23 @@
 {
   "compilerOptions": {
-    "target": "es2022",
-    "module": "commonjs",
-    "declaration": true,
+    "module": "es2020",
+    "target": "ES2020",
+    "strict": true,
+    "importHelpers": true,
+    "declarationDir": "./dist/dts",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true,
     "outDir": "./dist",
-    "esModuleInterop": true
+    "declaration": true,
+    "esModuleInterop": true,
+    "sourceMap": false
   },
   "include": [
     "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+    "./dist"
   ]
 }

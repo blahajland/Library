@@ -1,11 +1,8 @@
-import {themeService} from "./theme.service";
-import JSDOM from 'jsdom-global'
 import {assert, expect} from "chai";
 import {cookiesService} from "../cookies/cookies.service";
 import sinon from "sinon";
 import {ThemeError} from "../../shared/errors";
-
-JSDOM()
+import {themeService} from "./theme.service";
 
 describe('ThemeService', () => {
 
