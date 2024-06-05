@@ -8,7 +8,7 @@
     "build": "tsc",
     "test": "MochaTest=1 mocha",
     "clean": "rm -rf ./dist",
-    "compile": "tsc --declaration && npm pack"
+    "compile": "npm run clean && tsc --declaration && npm pack"
   },
   "repository": {
     "type": "git",
@@ -39,5 +39,9 @@
     "mocha": "^10.4.0",
     "sinon": "^18.0.0",
     "typescript": "^5.4.5"
-  }
+  },
+  "files": [
+    "./dist/**",
+    "package.json"
+  ]
 }
