@@ -1,0 +1,7 @@
+{
+  "extensions": ["ts"],
+  "spec": ["**/*.spec.ts"],
+  "node-option": [
+    "import=tsx"
+  ]
+}

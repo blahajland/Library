@@ -1,0 +1,43 @@
+{
+  "name": "blahaj-library",
+  "version": "0.0.1",
+  "main": "index.ts",
+  "type": "module",
+  "module": "commonjs",
+  "scripts": {
+    "build": "tsc",
+    "test": "MochaTest=1 mocha",
+    "clean": "rm -rf ./dist",
+    "compile": "tsc --declaration && npm pack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blahajland/Library.git"
+  },
+  "author": "Blahaj Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/blahajland/Library/issues"
+  },
+  "homepage": "https://github.com/blahajland/Library#readme",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.7.2",
+    "js-cookie": "^3.0.5",
+    "tsx": "^4.11.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.16",
+    "@types/js-cookie": "^3.0.6",
+    "@types/jsdom": "^21.1.7",
+    "@types/jsdom-global": "^3.0.7",
+    "@types/mocha": "^10.0.6",
+    "@types/sinon": "^17.0.3",
+    "chai": "^5.1.1",
+    "jsdom": "24.1.0",
+    "jsdom-global": "3.0.2",
+    "mocha": "^10.4.0",
+    "sinon": "^18.0.0",
+    "typescript": "^5.4.5"
+  }
+}
