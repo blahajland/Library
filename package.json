@@ -9,7 +9,8 @@
     "test": "mocha",
     "clean": "rm -rf ./dist",
     "build": "rollup -c && rm -rf dist/dts",
-    "compile": "npm run clean && npm run build && npm pack"
+    "compile": "npm run clean && npm run build && npm pack",
+    "git-compile": "npm run clean && npm run build"
   },
   "repository": {
     "type": "git",
