@@ -10,7 +10,7 @@ export default [
             format: 'esm',
             sourcemap: false
         },
-        external: ['axios', 'js-cookie'],
+        external: ['axios'],
         plugins: [
             typescript(),
             terser({

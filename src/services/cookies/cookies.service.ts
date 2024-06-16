@@ -1,12 +1,8 @@
-import Cookies from 'js-cookie'
 import {CookieError} from "../../shared/errors"
-
-type CookiesJar = { [p: string]: string }
 
 type sameSiteType = "strict" | "Strict" | "lax" | "Lax" | "none" | "None" | undefined
 
 export class CookiesService {
-    cookieInterface = Cookies
     sameSite: sameSiteType
     defaultExpiration: number
     private errorCodes = {
@@ -20,45 +16,64 @@ export class CookiesService {
     }
 
     hasCookie(key: string): boolean {
-        return this.cookieInterface.get(key) !== ''
+        try {
+            this.getCookie(key)
+            return true
+        } catch (_) {
+            return false
+        }
     }
 
-    setCookie(key: string, value: string) {
+    setCookie(key: string, value: string, days = this.defaultExpiration) {
         if (key === '')
             throw new CookieError(this.errorCodes.emptyKey, key)
-        this.cookieInterface.set(key, value, {sameSite: this.sameSite})
+        let date = new Date()
+        date.setTime(date.getTime() + (days * 86400 * 1000))
+        document.cookie = `${key}=${value}; expires=${date.toUTCString()}; SameSite=${this.sameSite}`
     }
 
     getCookie(key: string): string {
         if (key === '')
             throw new CookieError(this.errorCodes.emptyKey, key)
-        let returnedValue = this.cookieInterface.get(key)
-        if (!returnedValue || returnedValue === '')
-            throw new CookieError(this.errorCodes.doesntExist, key)
-        return returnedValue
+        const cookies = decodeURIComponent(document.cookie)
+            .split(new RegExp('; ?'))
+        for (let cookie of cookies) {
+            let pair = cookie.split("=")
+            if (pair[0].trim() === key.trim())
+                return pair[1]
+        }
+        throw new CookieError(this.errorCodes.doesntExist, key)
     }
 
     getCookieOrFallback(key: string, fallback: any): any {
-        if (key === '')
-            throw new CookieError(this.errorCodes.emptyKey, key)
-        let returnedValue = this.cookieInterface.get(key)
-        return returnedValue === '' ? fallback : returnedValue
+        try {
+            return this.getCookie(key)
+        } catch (_) {
+            return fallback
+        }
     }
 
-    getAllCookies(): CookiesJar {
-        return this.cookieInterface.get()
+    getAllCookies(): Map<string, any> {
+        let map = new Map<string, any>()
+        const cookies = decodeURIComponent(document.cookie)
+            .split(new RegExp('; ?'))
+        for (let cookie of cookies) {
+            let pair = cookie.split('=')
+            map.set(pair[0], pair[1])
+        }
+        return map
     }
 
     deleteCookie(key: string) {
         if (key === '')
             throw new CookieError(this.errorCodes.emptyKey, key)
-        this.cookieInterface.remove(key)
+        this.setCookie(key, '; expires=-1')
     }
 
     deleteAllCookies() {
-        const cookies: CookiesJar = this.cookieInterface.get()
-        for (let e in cookies) {
-            this.cookieInterface.remove(e)
+        const cookies = this.getAllCookies()
+        for (let [e, _] of cookies) {
+            this.deleteCookie(e)
         }
     }
 }

@@ -1,5 +1,3 @@
-import Cookies from 'js-cookie';
-
 interface AssetsGetter {
     get: (file: string) => any;
 }
@@ -31,23 +29,17 @@ declare class ColorsService {
 }
 declare const colorsService: ColorsService;
 
-type CookiesJar = {
-    [p: string]: string;
-};
 type sameSiteType = "strict" | "Strict" | "lax" | "Lax" | "none" | "None" | undefined;
 declare class CookiesService {
-    cookieInterface: Cookies.CookiesStatic<string> & {
-        noConflict?(): Cookies.CookiesStatic<string>;
-    };
     sameSite: sameSiteType;
     defaultExpiration: number;
     private errorCodes;
     constructor(sameSite?: sameSiteType, defaultExpiration?: number);
     hasCookie(key: string): boolean;
-    setCookie(key: string, value: string): void;
+    setCookie(key: string, value: string, days?: number): void;
     getCookie(key: string): string;
     getCookieOrFallback(key: string, fallback: any): any;
-    getAllCookies(): CookiesJar;
+    getAllCookies(): Map<string, any>;
     deleteCookie(key: string): void;
     deleteAllCookies(): void;
 }

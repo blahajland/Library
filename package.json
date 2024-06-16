@@ -6,11 +6,10 @@
   "module": "dist/index.mjs",
   "type": "module",
   "scripts": {
-    "test": "mocha",
-    "clean": "rm -rf ./dist",
+    "clean": "rm -rf ./dist && rm -f ./*.tgz",
     "build": "rollup -c && rm -rf dist/dts",
-    "compile": "npm run clean && npm run build && npm pack",
-    "git-compile": "npm run clean && npm run build"
+    "build:pack": "npm run clean && npm run build && npm pack",
+    "build:git": "npm run clean && npm run build"
   },
   "repository": {
     "type": "git",
@@ -25,25 +24,13 @@
   "description": "",
   "dependencies": {
     "axios": "^1.7.2",
-    "js-cookie": "^3.0.5",
-    "rollup-plugin-dts": "^6.1.1",
     "tsx": "^4.11.0"
   },
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
-    "@types/chai": "^4.3.16",
-    "@types/js-cookie": "^3.0.6",
-    "@types/jsdom": "^21.1.7",
-    "@types/jsdom-global": "^3.0.7",
-    "@types/mocha": "^10.0.6",
-    "@types/sinon": "^17.0.3",
-    "chai": "^5.1.1",
-    "jsdom": "24.1.0",
-    "jsdom-global": "3.0.2",
-    "mocha": "^10.4.0",
     "rollup": "^4.18.0",
-    "sinon": "^18.0.0",
+    "rollup-plugin-dts": "^6.1.1",
     "tslib": "^2.6.3",
     "typescript": "^5.4.5"
   },

@@ -1,7 +1,5 @@
 import axios from "axios";
 
-import Cookies from "js-cookie";
-
 class AssetsRetrieverError extends Error {
     constructor(message, details) {
         super(message), this.details = details;
@@ -79,41 +77,55 @@ const colorsService = new ColorsService;
 
 class CookiesService {
     constructor(sameSite = "Lax", defaultExpiration = 2) {
-        this.cookieInterface = Cookies, this.errorCodes = {
+        this.errorCodes = {
             emptyKey: "Unable to fetch a cookie with an empty key.",
             doesntExist: "The cookie doesn't exist."
         }, this.defaultExpiration = defaultExpiration, this.sameSite = sameSite;
     }
     hasCookie(key) {
-        return "" !== this.cookieInterface.get(key);
+        try {
+            return this.getCookie(key), !0;
+        } catch (_) {
+            return !1;
+        }
     }
-    setCookie(key, value) {
+    setCookie(key, value, days = this.defaultExpiration) {
         if ("" === key) throw new CookieError(this.errorCodes.emptyKey, key);
-        this.cookieInterface.set(key, value, {
-            sameSite: this.sameSite
-        });
+        let date = new Date;
+        date.setTime(date.getTime() + 86400 * days * 1e3), document.cookie = `${key}=${value}; expires=${date.toUTCString()}; SameSite=${this.sameSite}`;
     }
     getCookie(key) {
         if ("" === key) throw new CookieError(this.errorCodes.emptyKey, key);
-        let returnedValue = this.cookieInterface.get(key);
-        if (!returnedValue || "" === returnedValue) throw new CookieError(this.errorCodes.doesntExist, key);
-        return returnedValue;
+        const cookies = decodeURIComponent(document.cookie).split(new RegExp("; ?"));
+        for (let cookie of cookies) {
+            let pair = cookie.split("=");
+            if (pair[0].trim() === key.trim()) return pair[1];
+        }
+        throw new CookieError(this.errorCodes.doesntExist, key);
     }
     getCookieOrFallback(key, fallback) {
-        if ("" === key) throw new CookieError(this.errorCodes.emptyKey, key);
-        let returnedValue = this.cookieInterface.get(key);
-        return "" === returnedValue ? fallback : returnedValue;
+        try {
+            return this.getCookie(key);
+        } catch (_) {
+            return fallback;
+        }
     }
     getAllCookies() {
-        return this.cookieInterface.get();
+        let map = new Map;
+        const cookies = decodeURIComponent(document.cookie).split(new RegExp("; ?"));
+        for (let cookie of cookies) {
+            let pair = cookie.split("=");
+            map.set(pair[0], pair[1]);
+        }
+        return map;
     }
     deleteCookie(key) {
         if ("" === key) throw new CookieError(this.errorCodes.emptyKey, key);
-        this.cookieInterface.remove(key);
+        this.setCookie(key, "; expires=-1");
     }
     deleteAllCookies() {
-        const cookies = this.cookieInterface.get();
-        for (let e in cookies) this.cookieInterface.remove(e);
+        const cookies = this.getAllCookies();
+        for (let [e, _] of cookies) this.deleteCookie(e);
     }
 }
 
@@ -121,8 +133,7 @@ const cookiesService = new CookiesService("Strict");
 
 class ThemeService {
     constructor(names, cookieName = "theme") {
-        this.names = names, this.cookieName = cookieName, this.currentTheme = names.light, 
-        this.setTheme(names.light);
+        this.names = names, this.cookieName = cookieName, this.currentTheme = names.light;
     }
     setTheme(theme) {
         if (!Object.values(this.names).includes(theme)) throw new ThemeError("This theme tag doesn't exist", theme);
@@ -150,7 +161,7 @@ class ThemeService {
 const themeService = new ThemeService({
     light: "light",
     dark: "dark"
-}, "theme"), changeLoc = (href, newTab = !0) => {
+}, "blahaj-theme"), changeLoc = (href, newTab = !0) => {
     if (!document) return;
     const a = document.createElement("a");
     a.href = href, newTab && (a.target = "_blank", a.rel = "noopener noreferrer"), a.click();

@@ -15,7 +15,6 @@ export class ThemeService {
         this.names = names
         this.cookieName = cookieName
         this.currentTheme = names.light
-        this.setTheme(names.light)
     }
 
     setTheme(theme: string) {
@@ -43,7 +42,7 @@ export class ThemeService {
 
     private getHead(): HTMLHtmlElement {
         const head = document.querySelector('html')
-        if(!head)
+        if (!head)
             throw new Error(`html element doesn't exist.`)
         return head
     }
@@ -54,4 +53,4 @@ const defaultThemes: ThemeNames = {
     dark: 'dark'
 }
 
-export const themeService = new ThemeService(defaultThemes, 'theme')
+export const themeService = new ThemeService(defaultThemes, 'blahaj-theme')
