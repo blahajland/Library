@@ -1,25 +1,3 @@
-interface AssetsGetter {
-    get: (file: string) => any;
-}
-interface ImageBuckets {
-    'icons': AssetsGetter;
-    'apps': AssetsGetter;
-    'pictures': AssetsGetter;
-    'gifs': AssetsGetter;
-}
-interface RequestTypes {
-    images: ImageBuckets;
-    json: AssetsGetter;
-}
-declare class AssetsService {
-    api: string;
-    constructor(apiLink: string);
-    link(type: string, file: string, bucket?: string): string;
-    get(type: string, file: string, bucket?: string): Promise<any>;
-}
-declare const assetsService: AssetsService;
-declare const assets: RequestTypes;
-
 declare class ColorsService {
     colorChecker: RegExp;
     cssChecker: RegExp;
@@ -65,6 +43,7 @@ declare const themeService: ThemeService;
 declare const changeLoc: (href: string, newTab?: boolean) => void;
 declare const goToTop: () => void;
 declare const getEventValue: (event: any) => string;
+declare const getAsset: (file?: string) => string;
 
 type PixelSize = `${number}px`;
 declare enum VALIDATOR_STATE {
@@ -80,4 +59,4 @@ declare enum LoadingState {
     ERROR = 3
 }
 
-export { AssetsService, ColorsService, CookiesService, LoadingState, type PixelSize, ThemeService, VALIDATOR_STATE, type Validator, assets, assetsService, changeLoc, colorsService, cookiesService, getEventValue, goToTop, themeService };
+export { ColorsService, CookiesService, LoadingState, type PixelSize, ThemeService, VALIDATOR_STATE, type Validator, changeLoc, colorsService, cookiesService, getAsset, getEventValue, goToTop, themeService };

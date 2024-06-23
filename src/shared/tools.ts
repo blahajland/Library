@@ -12,3 +12,5 @@ export const changeLoc = (href: string, newTab = true) => {
 export const goToTop = () => changeLoc('#', false)
 
 export const getEventValue = (event: any): string => (event.target ? event.target.value : '')
+
+export const getAsset = (file: string = '') => `https://assets.blahaj.land/${file}`

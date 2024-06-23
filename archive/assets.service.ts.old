@@ -1,5 +1,5 @@
 import axios, {type AxiosResponse} from 'axios'
-import {AssetsRetrieverError} from "../../shared/errors";
+import {AssetsRetrieverError} from "../src/shared/errors";
 
 const staticLink = 'https://blahaj.land/static/api/'
 

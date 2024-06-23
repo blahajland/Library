@@ -1,62 +1,3 @@
-import axios from "axios";
-
-class AssetsRetrieverError extends Error {
-    constructor(message, details) {
-        super(message), this.details = details;
-    }
-}
-
-class CookieError extends Error {
-    constructor(message, key) {
-        super(message), this.key = key;
-    }
-}
-
-class ThemeError extends Error {
-    constructor(message, theme) {
-        super(message), this.theme = theme;
-    }
-}
-
-class AssetsService {
-    constructor(apiLink) {
-        this.api = apiLink;
-    }
-    link(type, file, bucket) {
-        return `${this.api}?type=${type}${bucket ? "&bucket=" + bucket : ""}&file=${file}`;
-    }
-    async get(type, file, bucket) {
-        let res;
-        try {
-            res = await axios.get(this.link(type, file, bucket));
-        } catch (err) {
-            throw new AssetsRetrieverError(`The API responded with the error code ${err.response.status}`, err);
-        }
-        if (200 !== res.status) throw new AssetsRetrieverError(`The API responded with the error code ${res.status}`, res);
-        return res.data;
-    }
-}
-
-const assetsService = new AssetsService("https://blahaj.land/static/api/"), assets = {
-    json: {
-        get: async file => assetsService.get("json", file)
-    },
-    images: {
-        icons: {
-            get: file => assetsService.link("image", file, "icons")
-        },
-        apps: {
-            get: file => assetsService.link("image", file, "apps")
-        },
-        pictures: {
-            get: file => assetsService.link("image", file, "pictures")
-        },
-        gifs: {
-            get: file => assetsService.link("image", file, "gifs")
-        }
-    }
-};
-
 class ColorsService {
     constructor() {
         this.colorChecker = new RegExp("^#(?:[0-9a-f]{6}|[0-9a-f]{8}|[0-9a-f]{3})$", "i"), 
@@ -74,6 +15,18 @@ class ColorsService {
 }
 
 const colorsService = new ColorsService;
+
+class CookieError extends Error {
+    constructor(message, key) {
+        super(message), this.key = key;
+    }
+}
+
+class ThemeError extends Error {
+    constructor(message, theme) {
+        super(message), this.theme = theme;
+    }
+}
 
 class CookiesService {
     constructor(sameSite = "Lax", defaultExpiration = 2) {
@@ -165,7 +118,7 @@ const themeService = new ThemeService({
     if (!document) return;
     const a = document.createElement("a");
     a.href = href, newTab && (a.target = "_blank", a.rel = "noopener noreferrer"), a.click();
-}, goToTop = () => changeLoc("#", !1), getEventValue = event => event.target ? event.target.value : "";
+}, goToTop = () => changeLoc("#", !1), getEventValue = event => event.target ? event.target.value : "", getAsset = (file = "") => `https://assets.blahaj.land/${file}`;
 
 var VALIDATOR_STATE, LoadingState;
 
@@ -177,4 +130,4 @@ var VALIDATOR_STATE, LoadingState;
     LoadingState[LoadingState.RESOLVED = 2] = "RESOLVED", LoadingState[LoadingState.ERROR = 3] = "ERROR";
 }(LoadingState || (LoadingState = {}));
 
-export { AssetsService, ColorsService, CookiesService, LoadingState, ThemeService, VALIDATOR_STATE, assets, assetsService, changeLoc, colorsService, cookiesService, getEventValue, goToTop, themeService };
+export { ColorsService, CookiesService, LoadingState, ThemeService, VALIDATOR_STATE, changeLoc, colorsService, cookiesService, getAsset, getEventValue, goToTop, themeService };
